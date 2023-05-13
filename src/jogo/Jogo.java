@@ -1,45 +1,87 @@
 package jogo;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Jogo {
-    public static void main(String[] args) {
-        String palavra = "arara";
-        Character tentativa;
-        int chances = 6;
+    public static void main(String[] args) throws IOException {
+
+        // Abre o arquivo e envolve o fluxo de bytes com um InputStreamReader
+        FileInputStream fileStream = new FileInputStream("src\\dicionario.txt");
+        InputStreamReader inputReader = new InputStreamReader(fileStream);
+
+        // Envolve o InputStreamReader com um BufferedReader para ler as linhas do arquivo
+        BufferedReader reader = new BufferedReader(inputReader);
+
+        // Lê as linhas do arquivo e as armazena em uma lista
+        List<String> lines = reader.lines().collect(Collectors.toList());
+
+        // Gera um número aleatório entre 0 e o número de linhas na lista
+        Random random = new Random();
+        int randomIndex = random.nextInt(lines.size());
+
+        // Seleciona a linha aleatória da lista
+        String palavra = lines.get(randomIndex);
+
+        int tamanhoPalavra = palavra.length();
         List<String> letrasJogadas = new ArrayList();
         Scanner input = new Scanner(System.in);
+        String palavraCopia = palavra;
+        Character tentativa = null;
 
-        System.out.println("BEM VINDO AO JOGO DA FORCA");
+        String[] vetor = new String[tamanhoPalavra];
+        for (int i = 0; i < vetor.length; i++) {
+            vetor[i] = "_ ";
+        }
 
+        for (String s : vetor) {
+            System.out.print(s);
+        }
+
+        System.out.println("\nBEM VINDO AO JOGO DA FORCA");
+        int chances = 6;
         while (chances >= 1) {
-            System.out.println("Você tem " + chances + " chances!\n");
-            System.out.println("Informe uma letra ou adivinhe a palavra: ");
+            System.out.println("Suas chances restantes: " + chances);
+            System.out.println("Informe uma letra: ");
             tentativa = input.next().toLowerCase().charAt(0);
 
-            if (letrasJogadas.contains(tentativa.toString())) {
-                System.out.println("Caiu na tratativa");
-                System.out.println(letrasJogadas);
-                break;
+            if (!tentativa.toString().matches("([a-z])")) {
+                System.out.println("Informe somente uma letra válida!");
+                continue;
+            } else if (letrasJogadas.contains(tentativa.toString())) {
+                continue;
             }
-            System.out.println("você digitou: " + tentativa);
 
             if (palavra.contains(tentativa.toString())) {
                 palavra = palavra.replaceAll(tentativa.toString(), "");
-                System.out.println("Palavra depois de ter acertado uma letra: " + palavra);
+
+                for (int i = 0; i < palavraCopia.length(); i++) {
+                    if (palavraCopia.charAt(i) == tentativa) {
+                        vetor[i] = tentativa.toString() + " ";
+                    }
+                }
+
                 if (palavra.isEmpty()) {
                     System.out.println("Parabéns você acertou!");
-                    break;
+                    chances = 0;
                 }
             } else {
                 chances--;
             }
 
             letrasJogadas.add(tentativa.toString());
-            System.out.println(letrasJogadas);
-
+            System.out.println("Letras jogadas " + letrasJogadas);
+            for (String s : vetor) {
+                System.out.print(s);
+            }
+            System.out.println();
         }
 
         input.close();

@@ -15,7 +15,7 @@ public class Jogo {
 
         Random random = new Random();
 
-        int categoria = random.nextInt(1, 3);
+        int categoria = random.nextInt(1, 4);
         String arquivo = "src\\dicionario" + categoria + ".txt";
 
         // Abre o arquivo e envolve o fluxo de bytes com um InputStreamReader
@@ -45,7 +45,22 @@ public class Jogo {
             palavraOculta[i] = "_ ";
         }
 
-        System.out.println("\nBEM VINDO AO JOGO DA FORCA");
+        String palavraCategoria = "";
+
+        switch (categoria) {
+            case 1:
+                palavraCategoria = "Comidas e Bebidas";
+                break;
+            case 2:
+                palavraCategoria = "Esportes";
+                break;
+            case 3:
+                palavraCategoria = "Animais";
+                break;
+        }
+
+        System.out.println("\nBEM VINDO AO JOGO DA FORCA" +
+                "\nCATEGORIA: " + palavraCategoria);
         int chances = 6;
 
         while (chances >= 1) {
@@ -75,6 +90,10 @@ public class Jogo {
 
                 if (palavra.isEmpty()) {
                     System.out.println("Parabéns você acertou!");
+                    for (String s : palavraOculta) {
+                        System.out.print(s);
+                    }
+                    System.out.println();
                     chances = 0;
                 }
             } else {

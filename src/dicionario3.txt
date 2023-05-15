@@ -1,0 +1,17 @@
+arara
+cavalo
+gato
+cachorro
+avestruz
+Boi
+Rato
+Pato
+Tatu
+Urso
+Lobo
+Elefante
+Orangotango
+Crocodilo
+Leopardo
+Puma
+Girafa

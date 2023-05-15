@@ -1,5 +1,0 @@
-arara
-cavalo
-gato
-cachorro
-avestruz
